@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AuthenticationServices {
+public class UserManagementService {
     @Autowired
     private PostGreRepo _postGreRepo;
     @Autowired
@@ -35,4 +35,29 @@ public class AuthenticationServices {
         }
     }
 
+    public ResponseEntity<String> DeleteUser(int id){
+        try{
+            _postGreRepo.deleteById(id);
+            return ResponseEntity.ok("User deleted successfully");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Error deleting user");
+        }
+    }
+
+    public ResponseEntity<String> UpdateUser(User user){
+        try{
+            _postGreRepo.save(user);
+            return ResponseEntity.ok("User updated successfully");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Error updating user");
+        }
+    }
+
+    public User GetUserById(int id){
+        try{
+            return _postGreRepo.findById(id).get();
+        }catch (Exception e){
+            throw new RuntimeException("Error getting user");
+        }
+    }
 }
