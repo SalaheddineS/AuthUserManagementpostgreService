@@ -19,6 +19,7 @@ public class User {
     private CitiesEnum city;
     private String phone;
     private String address;
+    private String token;
 
     public User() {
     }
@@ -48,6 +49,14 @@ public class User {
 
     public int getId() {
         return id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setId(int id) {

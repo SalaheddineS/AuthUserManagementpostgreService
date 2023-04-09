@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtUtil {
@@ -18,10 +20,14 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String email,String id) {
+    public String generateToken(String email, int id) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + TimeUnit.HOURS.toMillis(8));
+
         return Jwts.builder()
                 .setSubject(email)
-                .setId(id)
+                .setId(String.valueOf(id))
+                .setExpiration(expiryDate) // Set expiration time
                 .signWith(getSigningKey())
                 .compact();
     }
