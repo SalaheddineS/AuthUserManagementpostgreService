@@ -6,16 +6,15 @@ import com.service.Authentication.Repositories.PostGreRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
-public class UserManagementService {
+public class UserManagementService implements IUserManagementService {
     @Autowired
     private PostGreRepo _postGreRepo;
     @Autowired
     private SecurityConfig _securityConfig;
-
+    @Override
     public ResponseEntity<String> AddUser(User user){
         try{
             user.setPassword(_securityConfig.passwordEncoder().encode(user.getPassword()));
@@ -27,6 +26,7 @@ public class UserManagementService {
         }
 
     }
+    @Override
     public List<User> GetAll(){
         try{
             return _postGreRepo.findAll();
@@ -34,7 +34,7 @@ public class UserManagementService {
             throw new RuntimeException("Error getting users");
         }
     }
-
+    @Override
     public ResponseEntity<String> DeleteUser(int id){
         try{
             _postGreRepo.deleteById(id);
@@ -43,7 +43,7 @@ public class UserManagementService {
             return ResponseEntity.badRequest().body("Error deleting user");
         }
     }
-
+    @Override
     public ResponseEntity<String> UpdateUser(User user){
         try{
             _postGreRepo.save(user);
@@ -52,7 +52,7 @@ public class UserManagementService {
             return ResponseEntity.badRequest().body("Error updating user");
         }
     }
-
+    @Override
     public User GetUserById(int id){
         try{
             return _postGreRepo.findById(id).get();

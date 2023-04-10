@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 @Service
-public class AuthenticationService {
+public class AuthenticationService implements IAuthenticationService {
     @Autowired
     private PostGreRepo postGreRepo;
     @Autowired
     private SecurityConfig securityConfig;
     @Autowired
     private JwtUtil jwtUtil;
-
+    @Override
     public Map<String, String> AuthenticateUser(String email, String password){
         boolean userExists = postGreRepo.existsByEmail(email);
         if (!userExists){
@@ -34,7 +34,7 @@ public class AuthenticationService {
         postGreRepo.save(user);
         return token;
     }
-
+    @Override
     public boolean isUserAuthenticated(String email){
         boolean userExists = postGreRepo.existsByEmail(email);
         if (!userExists){
@@ -43,7 +43,7 @@ public class AuthenticationService {
         User user = postGreRepo.findByEmail(email);
         return jwtUtil.validateToken(user.getToken());
     }
-
+    @Override
     public ResponseEntity<String> logout(String email){
         boolean userExists = postGreRepo.existsByEmail(email);
         if (!userExists){

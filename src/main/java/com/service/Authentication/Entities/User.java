@@ -16,6 +16,7 @@ public class User {
     private String password;
     private String name;
     private String lastname;
+    @Enumerated(EnumType.STRING)
     private CitiesEnum city;
     private String phone;
     private String address;
