@@ -21,6 +21,7 @@ public class User {
     private String phone;
     private String address;
     private String token;
+    private boolean isAdmin;
 
     public User() {
     }
@@ -122,6 +123,14 @@ public class User {
 
     public String getAddress() {
         return address;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public void setAddress(String address) {

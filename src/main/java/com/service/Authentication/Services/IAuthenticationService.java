@@ -5,8 +5,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 public interface IAuthenticationService {
-    public Map<String, String> AuthenticateUser(String email, String password);
+    public ResponseEntity<?> AuthenticateUser(String email, String password);
     public boolean isUserAuthenticated(String email);
     public ResponseEntity<String> logout(String email);
-
+    public boolean isAdministrator(String email);
+    public String getEmailFromToken(String token);
 }

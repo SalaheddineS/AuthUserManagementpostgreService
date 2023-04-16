@@ -11,12 +11,14 @@ import java.util.List;
 
 @Controller
 @ResponseBody
+@CrossOrigin(origins = "*", allowedHeaders = "*",exposedHeaders = "*")
 public class UserManagementController {
     @Autowired
     private UserManagementService _userManagementService;
 
    @PostMapping("/addUser")
     public ResponseEntity<String> AddUser(@RequestBody User user){
+
          return _userManagementService.AddUser(user);
     }
     @GetMapping("/getAll")
