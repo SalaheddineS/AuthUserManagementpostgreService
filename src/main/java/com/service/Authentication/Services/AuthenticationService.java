@@ -22,7 +22,7 @@ public class AuthenticationService implements IAuthenticationService {
     private JwtUtil jwtUtil;
     @Override
     public ResponseEntity<?> AuthenticateUser(String email, String password) {
-        email = email.toLowerCase();
+        email = email.toUpperCase();
         boolean userExists = postGreRepo.existsByEmail(email);
         if (!userExists) {
             throw new RuntimeException("User does not exist");
@@ -36,13 +36,15 @@ public class AuthenticationService implements IAuthenticationService {
         postGreRepo.save(user);
         HttpHeaders headers = new HttpHeaders();
         headers.add("token",  token);
+        headers.add("email", user.getEmail().toUpperCase());
+        headers.add("id", String.valueOf(user.getId()));
         return ResponseEntity.ok().headers(headers).build();
     }
 
     @Override
     public boolean isUserAuthenticated(String token){
         String email=jwtUtil.getEmailFromToken(token);
-        email = email.toLowerCase();
+        email = email.toUpperCase();
         User user = postGreRepo.findByEmail(email);
         if(jwtUtil.validateToken(user.getToken()) && user.getToken().equals(token)){
             return true;
@@ -54,7 +56,7 @@ public class AuthenticationService implements IAuthenticationService {
          if(!jwtUtil.validateToken(token)){
              throw new RuntimeException("Invalid token");
          }
-            User user = postGreRepo.findByEmail(jwtUtil.getEmailFromToken(token).toLowerCase());
+            User user = postGreRepo.findByEmail(jwtUtil.getEmailFromToken(token).toUpperCase());
             user.setToken(null);
             postGreRepo.save(user);
             return ResponseEntity.ok("User logged out successfully");
@@ -65,12 +67,12 @@ public class AuthenticationService implements IAuthenticationService {
         if(!jwtUtil.validateToken(token)){
             throw new RuntimeException("Invalid token");
         }
-        User user = postGreRepo.findByEmail(jwtUtil.getEmailFromToken(token).toLowerCase());
+        User user = postGreRepo.findByEmail(jwtUtil.getEmailFromToken(token).toUpperCase());
         return user.isAdmin();
     }
 
     @Override
     public String getEmailFromToken(String token){
-        return jwtUtil.getEmailFromToken(token).toLowerCase();
+        return jwtUtil.getEmailFromToken(token).toUpperCase();
     }
 }

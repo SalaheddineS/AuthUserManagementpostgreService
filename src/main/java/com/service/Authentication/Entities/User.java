@@ -4,6 +4,8 @@ import com.service.Authentication.Enums.CitiesEnum;
 import com.service.Authentication.Enums.GenderEnum;
 import jakarta.persistence.*;
 
+import javax.validation.constraints.NotNull;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -12,14 +14,26 @@ public class User {
     private int id;
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
+    @NotNull
     private String email;
+    @NotNull
+
     private String password;
+    @NotNull
+
     private String name;
+    @NotNull
+
     private String lastname;
+    @NotNull
+
     @Enumerated(EnumType.STRING)
     private CitiesEnum city;
+    @NotNull
     private String phone;
+    @NotNull
     private String address;
+
     private String token;
     private boolean isAdmin;
 

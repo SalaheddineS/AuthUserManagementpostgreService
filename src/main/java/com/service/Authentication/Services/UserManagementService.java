@@ -21,12 +21,12 @@ public class UserManagementService implements IUserManagementService {
     @Override
     public ResponseEntity<String> AddUser(User user){
         try{
-            if(_postGreRepo.existsByEmail(user.getEmail().toLowerCase())){
+            if(_postGreRepo.existsByEmail(user.getEmail().toUpperCase())){
                 throw new RuntimeException("User already exists");
             }
             user.setPassword(_securityConfig.passwordEncoder().encode(user.getPassword()));
             user.setAdmin(false);
-            user.setEmail(user.getEmail().toLowerCase());
+            user.setEmail(user.getEmail().toUpperCase());
             _postGreRepo.save(user);
             return ResponseEntity.ok("User added successfully");
         }catch (Exception e){
@@ -56,7 +56,19 @@ public class UserManagementService implements IUserManagementService {
     @Override
     public ResponseEntity<String> UpdateUser(User user){
         try{
-            user.setEmail(user.getEmail().toLowerCase());
+            user.setEmail(user.getEmail().toUpperCase());
+            System.out.println(user.getPassword());
+            String password=_postGreRepo.findByEmail(user.getEmail()).getPassword();
+            if(user.getPassword().length()<5){
+                user.setPassword(password);
+                _postGreRepo.save(user);
+                return ResponseEntity.ok("User updated successfully but kept the same password");
+            }
+            if(user.getPassword().equals(password)){
+                _postGreRepo.save(user);
+                return ResponseEntity.ok("User updated successfully");
+            }
+            user.setPassword(_securityConfig.passwordEncoder().encode(user.getPassword()));
             _postGreRepo.save(user);
             return ResponseEntity.ok("User updated successfully");
         }catch (Exception e){
